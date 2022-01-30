@@ -7,11 +7,26 @@ import shutil
 
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
+from setuptools.command.install import install
 
 enable_neon = False
 
-if '--enable_neon' in sys.argv:
-    enable_neon = True
+class InstallCommand(install):
+    user_options = install.user_options + [
+        ('enable_neon', None, None),
+    ]
+
+    def initialize_options(self):
+        install.initialize_options(self)
+        self.enable_neon = None
+
+    def finalize_options(self):
+        install.finalize_options(self)
+
+    def run(self):
+        global enable_neon
+        enable_neon = self.enable_neon
+        install.run(self)
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -96,6 +111,7 @@ setup(
     ],
     ext_modules=[ CMakeExtension('tinyscaler') ],
     cmdclass={
+        'install': InstallCommand,
         'build_ext': CMakeBuild,
     },
     zip_safe=True,
