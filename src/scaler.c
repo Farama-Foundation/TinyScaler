@@ -22,32 +22,25 @@ void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32
 #if defined(__x86_64__) // SSE implementation
 
 void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
-    f32 ratio_x = (f32)src_width / (f32)dst_width;
-    f32 ratio_y = (f32)src_height / (f32)dst_height;
+    f32 ratio_x = (f32)(src_width - 1) / (f32)dst_width;
+    f32 ratio_y = (f32)(src_height - 1) / (f32)dst_height;
 
     if (((size_t)src | (size_t)dst) & 0xf) {
         for (i32 dst_x = 0; dst_x < dst_width; dst_x++) {
             for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
                 f32 src_x_f = (dst_x + 0.5f) * ratio_x;
                 f32 src_y_f = (dst_y + 0.5f) * ratio_y;
-                f32 src_x_f0 = (dst_x + 0.25f) * ratio_x;
-                f32 src_y_f0 = (dst_y + 0.25f) * ratio_y;
-                f32 src_x_f1 = (dst_x + 0.75f) * ratio_x;
-                f32 src_y_f1 = (dst_y + 0.75f) * ratio_y;
-                i32 src_x0 = (i32)src_x_f0;
-                i32 src_y0 = (i32)src_y_f0;
-                i32 src_x1 = (i32)src_x_f1;
-                i32 src_y1 = (i32)src_y_f1;
-
-                f32 interp_x = src_x_f - src_x0;
-                f32 interp_y = src_y_f - src_y0;
+                i32 src_x = (i32)src_x_f;
+                i32 src_y = (i32)src_y_f;
+                f32 interp_x = src_x_f - src_x;
+                f32 interp_y = src_y_f - src_y;
 
                 i32 dst_start = 4 * (dst_y + dst_height * dst_x);
 
-                i32 src_start00 = 4 * (src_y0 + src_height * src_x0);
-                i32 src_start01 = 4 * (src_y0 + src_height * src_x1);
-                i32 src_start10 = 4 * (src_y1 + src_height * src_x0);
-                i32 src_start11 = 4 * (src_y1 + src_height * src_x1);
+                i32 src_start00 = 4 * (src_y + src_height * src_x);
+                i32 src_start01 = src_start00 + 4;
+                i32 src_start10 = src_start00 + src_height * 4;
+                i32 src_start11 = src_start10 + 4;
 
                 __m128 ix = _mm_set1_ps(interp_x);
                 __m128 ix1 = _mm_set1_ps(1.0f - interp_x);
@@ -74,24 +67,17 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
             for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
                 f32 src_x_f = (dst_x + 0.5f) * ratio_x;
                 f32 src_y_f = (dst_y + 0.5f) * ratio_y;
-                f32 src_x_f0 = (dst_x + 0.25f) * ratio_x;
-                f32 src_y_f0 = (dst_y + 0.25f) * ratio_y;
-                f32 src_x_f1 = (dst_x + 0.75f) * ratio_x;
-                f32 src_y_f1 = (dst_y + 0.75f) * ratio_y;
-                i32 src_x0 = (i32)src_x_f0;
-                i32 src_y0 = (i32)src_y_f0;
-                i32 src_x1 = (i32)src_x_f1;
-                i32 src_y1 = (i32)src_y_f1;
-
-                f32 interp_x = src_x_f - src_x0;
-                f32 interp_y = src_y_f - src_y0;
+                i32 src_x = (i32)src_x_f;
+                i32 src_y = (i32)src_y_f;
+                f32 interp_x = src_x_f - src_x;
+                f32 interp_y = src_y_f - src_y;
 
                 i32 dst_start = 4 * (dst_y + dst_height * dst_x);
 
-                i32 src_start00 = 4 * (src_y0 + src_height * src_x0);
-                i32 src_start01 = 4 * (src_y0 + src_height * src_x1);
-                i32 src_start10 = 4 * (src_y1 + src_height * src_x0);
-                i32 src_start11 = 4 * (src_y1 + src_height * src_x1);
+                i32 src_start00 = 4 * (src_y + src_height * src_x);
+                i32 src_start01 = src_start00 + 4;
+                i32 src_start10 = src_start00 + src_height * 4;
+                i32 src_start11 = src_start10 + 4;
 
                 __m128 ix = _mm_set1_ps(interp_x);
                 __m128 ix1 = _mm_set1_ps(1.0f - interp_x);
@@ -118,31 +104,24 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
 #elif defined(__ARM_NEON) // ARM Neon implementation
 
 void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
-    f32 ratio_x = (f32)src_width / (f32)dst_width;
-    f32 ratio_y = (f32)src_height / (f32)dst_height;
+    f32 ratio_x = (f32)(src_width - 1) / (f32)dst_width;
+    f32 ratio_y = (f32)(src_height - 1) / (f32)dst_height;
 
     for (i32 dst_x = 0; dst_x < dst_width; dst_x++) {
         for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
             f32 src_x_f = (dst_x + 0.5f) * ratio_x;
             f32 src_y_f = (dst_y + 0.5f) * ratio_y;
-            f32 src_x_f0 = (dst_x + 0.25f) * ratio_x;
-            f32 src_y_f0 = (dst_y + 0.25f) * ratio_y;
-            f32 src_x_f1 = (dst_x + 0.75f) * ratio_x;
-            f32 src_y_f1 = (dst_y + 0.75f) * ratio_y;
-            i32 src_x0 = (i32)src_x_f0;
-            i32 src_y0 = (i32)src_y_f0;
-            i32 src_x1 = (i32)src_x_f1;
-            i32 src_y1 = (i32)src_y_f1;
-
-            f32 interp_x = src_x_f - src_x0;
-            f32 interp_y = src_y_f - src_y0;
+            i32 src_x = (i32)src_x_f;
+            i32 src_y = (i32)src_y_f;
+            f32 interp_x = src_x_f - src_x;
+            f32 interp_y = src_y_f - src_y;
 
             i32 dst_start = 4 * (dst_y + dst_height * dst_x);
 
-            i32 src_start00 = 4 * (src_y0 + src_height * src_x0);
-            i32 src_start01 = 4 * (src_y0 + src_height * src_x1);
-            i32 src_start10 = 4 * (src_y1 + src_height * src_x0);
-            i32 src_start11 = 4 * (src_y1 + src_height * src_x1);
+            i32 src_start00 = 4 * (src_y + src_height * src_x);
+            i32 src_start01 = src_start00 + 4;
+            i32 src_start10 = src_start00 + src_height * 4;
+            i32 src_start11 = src_start10 + 4;
 
             float32x4_t ix = vdupq_n_f32(interp_x);
             float32x4_t ix1 = vdupq_n_f32(1.0f - interp_x);
@@ -171,31 +150,24 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
 #else // No SIMD implementation
 
 void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
-    f32 ratio_x = (f32)src_width / (f32)dst_width;
-    f32 ratio_y = (f32)src_height / (f32)dst_height;
+    f32 ratio_x = (f32)(src_width - 1) / (f32)dst_width;
+    f32 ratio_y = (f32)(src_height - 1) / (f32)dst_height;
 
     for (i32 dst_x = 0; dst_x < dst_width; dst_x++) {
         for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
             f32 src_x_f = (dst_x + 0.5f) * ratio_x;
             f32 src_y_f = (dst_y + 0.5f) * ratio_y;
-            f32 src_x_f0 = (dst_x + 0.25f) * ratio_x;
-            f32 src_y_f0 = (dst_y + 0.25f) * ratio_y;
-            f32 src_x_f1 = (dst_x + 0.75f) * ratio_x;
-            f32 src_y_f1 = (dst_y + 0.75f) * ratio_y;
-            i32 src_x0 = (i32)src_x_f0;
-            i32 src_y0 = (i32)src_y_f0;
-            i32 src_x1 = (i32)src_x_f1;
-            i32 src_y1 = (i32)src_y_f1;
-
-            f32 interp_x = src_x_f - src_x0;
-            f32 interp_y = src_y_f - src_y0;
+            i32 src_x = (i32)src_x_f;
+            i32 src_y = (i32)src_y_f;
+            f32 interp_x = src_x_f - src_x;
+            f32 interp_y = src_y_f - src_y;
 
             i32 dst_start = 4 * (dst_y + dst_height * dst_x);
 
-            i32 src_start00 = 4 * (src_y0 + src_height * src_x0);
-            i32 src_start01 = 4 * (src_y0 + src_height * src_x1);
-            i32 src_start10 = 4 * (src_y1 + src_height * src_x0);
-            i32 src_start11 = 4 * (src_y1 + src_height * src_x1);
+            i32 src_start00 = 4 * (src_y + src_height * src_x);
+            i32 src_start01 = src_start00 + 4;
+            i32 src_start10 = src_start00 + src_height * 4;
+            i32 src_start11 = src_start10 + 4;
 
             f32 interp_x1 = 1.0f - interp_x;
             f32 interp_y1 = 1.0f - interp_y;

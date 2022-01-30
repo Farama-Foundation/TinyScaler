@@ -10,7 +10,7 @@ def _scale_nearest_4f32(src : np.ndarray, size : tuple, dst : np.ndarray = None)
         length = size[0] * size[1] * 4
 
         dst = np.ascontiguousarray(np.empty(length, dtype=np.float32))
-    elif len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] == size[1] or dst.shape[2] != 4:
+    elif len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] != size[1] or dst.shape[2] != 4:
         raise Exception('Incorrect dst size!')
 
     src_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(src)))
@@ -27,7 +27,7 @@ def _scale_bilinear_4f32(src : np.ndarray, size : tuple, dst : np.ndarray = None
         length = size[0] * size[1] * 4
 
         dst = np.ascontiguousarray(np.empty(length, dtype=np.float32))
-    elif len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] == size[1] or dst.shape[2] != 4:
+    elif len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] != size[1] or dst.shape[2] != 4:
         raise Exception('Incorrect dst size!')
 
     src_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(src)))
