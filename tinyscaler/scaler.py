@@ -38,6 +38,9 @@ def _scale_bilinear_4f32(src : np.ndarray, size : tuple, dst : np.ndarray = None
     return dst.reshape((size[0], size[1], 4))
 
 def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
+    src_channels = 4
+    src_type = src.dtype
+
     # Automatic conversion
     if dst is None and auto_convert:
         if len(src.shape) != 3:
@@ -48,6 +51,8 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
                 src = src / 255.0
             else:
                 src = src.astype(np.float32)
+
+        src_channels = src.shape[2]
 
         if src.shape[2] == 1: # Gray
             src_new = np.empty((src.shape[0], src.shape[1], 4), dtype=np.float32)
@@ -60,7 +65,7 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
         elif src.shape[2] == 3: # RGB
             src_new = np.empty((src.shape[0], src.shape[1], 4), dtype=np.float32)
             src_new[:, :, :3] = src
-            src_new[:, :, 3] = np.ones((src.shape[0], src.shape[1], 1))
+            src_new[:, :, 3] = np.ones((src.shape[0], src.shape[1]))
 
             src = src_new
         elif src.shape[2] != 4:
@@ -75,5 +80,12 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
             result = _scale_nearest_4f32(src, size, dst)
     except Exception as e:
         raise e
+
+    # Covert back
+    if auto_convert:
+        if src_type == np.uint8:
+            result = (result * 255.0).astype(np.uint8)[:, :, :src_channels]
+        else:
+            result = result[:, :, :src_channels].astype(src_type)
 
     return result
