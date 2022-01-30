@@ -18,8 +18,7 @@ import tinyscaler
 
 img = np.random.rand(8, 8, 4).astype(np.float32)
 
-print(tinyscaler.scale_nearest(img, (64, 64)))
-print(tinyscaler.scale_bilinear(img, (64, 64)))
+print(tinyscaler.scale(img, (64, 64)))
 ```
 
 ## License
