@@ -16,7 +16,7 @@ A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon).
 import numpy as np
 import tinyscaler
 
-img = np.random.rand(8, 8, 4)
+img = np.random.rand(8, 8, 4).astype(np.float32)
 
 print(tinyscaler.scale_nearest(img, (64, 64)))
 print(tinyscaler.scale_bilinear(img, (64, 64)))
