@@ -3,7 +3,7 @@ from ._scaler_cffi import ffi, lib
 
 auto_convert = True # Global controlling whether automatic channel/type conversions take place
 
-def _scale_nearest_4f32(src : np.ndarray, size : tuple, dst : np.ndarray = None):
+def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
     assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
 
     if dst is None:
@@ -16,24 +16,10 @@ def _scale_nearest_4f32(src : np.ndarray, size : tuple, dst : np.ndarray = None)
     src_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(src)))
     dst_cptr = ffi.cast('f32*', ffi.from_buffer(dst))
 
-    lib.scale_nearest_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
-
-    return dst.reshape((size[0], size[1], 4))
-
-def _scale_bilinear_4f32(src : np.ndarray, size : tuple, dst : np.ndarray = None):
-    assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
-
-    if dst is None:
-        length = size[0] * size[1] * 4
-
-        dst = np.ascontiguousarray(np.empty(length, dtype=np.float32))
-    elif len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] != size[1] or dst.shape[2] != 4:
-        raise Exception('Incorrect dst size!')
-
-    src_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(src)))
-    dst_cptr = ffi.cast('f32*', ffi.from_buffer(dst))
-
-    lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
+    if mode == 'bilinear':
+        lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
+    else:
+        lib.scale_nearest_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
 
     return dst.reshape((size[0], size[1], 4))
 
@@ -74,10 +60,7 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
     result = None
 
     try:
-        if mode == 'bilinear':
-            result = _scale_bilinear_4f32(src, size, dst)
-        else:
-            result = _scale_nearest_4f32(src, size, dst)
+        result = _scale_4f32(src, size, mode, dst)
     except Exception as e:
         raise e
 
