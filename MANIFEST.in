@@ -1,2 +1,1 @@
-include README.md LICENSE
-global-include CMakeLists.txt *.cmake
+include README.md LICENSE.md

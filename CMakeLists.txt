@@ -27,9 +27,4 @@ if(ENABLE_SIMD)
     endif()
 endif()
 
-
-set(TINYSCALER_SRC
-    "src/scaler.c"
-)
-
-add_library(TinyScaler ${TINYSCALER_SRC})
+add_library(TinyScaler "src/scaler.c")

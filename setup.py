@@ -3,22 +3,23 @@ import re
 import sys
 import platform
 import subprocess
+import shutil
 
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
-from distutils.version import LooseVersion
 
 enable_neon = False
 
-if "--enable_neon" in sys.argv:
+if '--enable_neon' in sys.argv:
     enable_neon = True
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[
-            "src/scaler.h",
-            "src/scaler.c",
+            'src/scaler.h',
+            'src/scaler.c',
             ])
+
         self.sourcedir = os.path.abspath(sourcedir)
 
 class CMakeBuild(build_ext):
@@ -26,13 +27,8 @@ class CMakeBuild(build_ext):
         try:
             out = subprocess.check_output(['cmake', '--version'])
         except OSError:
-            raise RuntimeError("CMake must be installed to build the following extensions: " +
-                               ", ".join(e.name for e in self.extensions))
-
-        if platform.system() == "Windows":
-            cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode()).group(1))
-            if cmake_version < '3.1.0':
-                raise RuntimeError("CMake >= 3.1.0 is required on Windows")
+            raise RuntimeError('CMake must be installed to build the following extensions: ' +
+                               ', '.join(e.name for e in self.extensions))
 
         for ext in self.extensions:
             self.build_extension(ext)
@@ -40,7 +36,7 @@ class CMakeBuild(build_ext):
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
-        # Required for auto-detection of auxiliary "native" libs
+        # Required for auto-detection of auxiliary 'native' libs
         if not extdir.endswith(os.path.sep):
             extdir += os.path.sep
 
@@ -51,7 +47,7 @@ class CMakeBuild(build_ext):
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
 
-        if platform.system() == "Windows":
+        if platform.system() == 'Windows':
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
 
             if sys.maxsize > 2**32:
@@ -68,35 +64,40 @@ class CMakeBuild(build_ext):
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 
-        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
+        subprocess.check_call(['cmake', ext.sourcedir ] + cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
+        # Call manually due to ill-defined order when using cffi_modules
+        import ffi_build
+
+        ffi_build.build(self.build_temp)
+
 setup(
-    name="tinyscaler",
-    version="1.0.0",
-    description="A tiny, simple image scaler",
+    name='tinyscaler',
+    version='1.0.0',
+    description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[
-       "cffi",
+       'cffi',
+       'numpy',
     ],
-    packages=find_packages(),
+    packages=['tinyscaler'],
+    package_dir={'tinyscaler': 'tinyscaler'},
+    package_data={'tinyscaler': ['_scaler_cffi.*']},
     license='MIT',
     classifiers=[
-        "Environment :: Console",
-        "Programming Language :: Python :: 3",
-        "Intended Audience :: Science/Research",
-        "License :: MIT License",
-        "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules"
+        'Environment :: Console',
+        'Programming Language :: Python :: 3',
+        'Intended Audience :: Science/Research',
+        'License :: MIT License',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python',
+        'Topic :: Software Development :: Libraries :: Python Modules'
     ],
-    ext_modules=[CMakeExtension("tinyscaler")],
+    ext_modules=[ CMakeExtension('tinyscaler') ],
     cmdclass={
         'build_ext': CMakeBuild,
     },
-    zip_safe=False,
+    zip_safe=True,
     include_package_data=True,
-    cffi_modules=[
-        "./ffi_build.py:ffi"
-    ]
 )

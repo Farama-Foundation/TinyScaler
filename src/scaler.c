@@ -1,7 +1,7 @@
 #include "scaler.h"
 
 // Nearest does not use SIMD
-void scaler_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
+void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
     f32 ratio_x = (f32)src_width / (f32)dst_width;
     f32 ratio_y = (f32)src_height / (f32)dst_height;
 
@@ -21,7 +21,7 @@ void scaler_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
 
 #if defined(__x86_64__) // SSE implementation
 
-void scaler_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
+void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
     f32 ratio_x = (f32)src_width / (f32)dst_width;
     f32 ratio_y = (f32)src_height / (f32)dst_height;
 
@@ -103,7 +103,7 @@ void scaler_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i
 
 #elif defined(__ARM_NEON) // ARM Neon implementation
 
-void scaler_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
+void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
     f32 ratio_x = (f32)src_width / (f32)dst_width;
     f32 ratio_y = (f32)src_height / (f32)dst_height;
 
@@ -149,7 +149,7 @@ void scaler_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i
 
 #else // No SIMD implementation
 
-void scaler_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
+void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
     f32 ratio_x = (f32)src_width / (f32)dst_width;
     f32 ratio_y = (f32)src_height / (f32)dst_height;
 
