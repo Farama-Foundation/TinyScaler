@@ -70,7 +70,7 @@ class CMakeBuild(build_ext):
         # Call manually due to ill-defined order when using cffi_modules
         import ffi_build
 
-        ffi_build.build(self.build_temp)
+        ffi_build.build(self.build_temp, extdir)
 
 setup(
     name='tinyscaler',

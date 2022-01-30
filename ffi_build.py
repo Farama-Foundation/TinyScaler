@@ -1,7 +1,7 @@
 from cffi import FFI
 import os.path
 
-def build(lib_path):
+def build(lib_path, ext_path):
     ffi = FFI()
 
     ffi.cdef('''
@@ -22,4 +22,4 @@ def build(lib_path):
         libraries=['TinyScaler'],
     )
 
-    ffi.compile(verbose=True, target='tinyscaler/_scaler_cffi.*')
+    ffi.compile(verbose=True, target=os.path.join(ext_path, 'tinyscaler/_scaler_cffi.*'))
