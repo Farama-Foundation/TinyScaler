@@ -1,5 +1,5 @@
 import numpy as np
-from _scaler_cffi import ffi, lib
+from ._scaler_cffi import ffi, lib
 
 def scale_nearest(src : np.ndarray, size : tuple):
     assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
