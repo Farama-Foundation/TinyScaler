@@ -8,7 +8,13 @@ A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon).
 
 ## Install
 
+x86_64:
+
 > pip install .
+
+Arm (must manually specify SIMD support, otherwise will use a fallback):
+
+> pip install . --install-option="--enable_neon"
 
 ## Usage
 
