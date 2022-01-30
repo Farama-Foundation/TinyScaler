@@ -4,16 +4,17 @@
 void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
     f32 ratio_x = (f32)src_width / (f32)dst_width;
     f32 ratio_y = (f32)src_height / (f32)dst_height;
-
-    i32 dst_size = dst_width * dst_height;
+    i32 src_height4 = src_height * 4;
 
     for (i32 dst_x = 0; dst_x < dst_width; dst_x++) {
         i32 src_x = (i32)((dst_x + 0.5f) * ratio_x);
+        i32 dst_offset4 = 4 * dst_height * dst_x;
+        i32 src_offset4 = src_height4 * src_x;
 
         for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
             i32 src_y = (i32)((dst_y + 0.5f) * ratio_y);
 
-            memcpy(&dst[4 * (dst_y + dst_height * dst_x)], &src[4 * (src_y + src_height * src_x)], RGBA32F_SIZE);
+            memcpy(&dst[4 * dst_y + dst_offset4], &src[4 * src_y + src_offset4], RGBA32F_SIZE);
         }
     }
 }
@@ -36,7 +37,7 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
         __m128 ix1 = _mm_set1_ps(1.0f - interp_x);
 
         i32 dst_offset4 = 4 * dst_height * dst_x;
-        i32 src_offset4 = 4 * src_height * src_x;
+        i32 src_offset4 = src_height4 * src_x;
 
         for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
             f32 src_y_f = (dst_y + 0.5f) * ratio_y;
@@ -84,7 +85,7 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
         float32x4_t ix1 = vdupq_n_f32(1.0f - interp_x);
 
         i32 dst_offset4 = 4 * dst_height * dst_x;
-        i32 src_offset4 = 4 * src_height * src_x;
+        i32 src_offset4 = src_height4 * src_x;
 
         for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
             f32 src_y_f = (dst_y + 0.5f) * ratio_y;
@@ -134,7 +135,7 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
         f32 interp_x1 = 1.0f - interp_x;
 
         i32 dst_offset4 = 4 * dst_height * dst_x;
-        i32 src_offset4 = 4 * src_height * src_x;
+        i32 src_offset4 = src_height4 * src_x;
 
         for (i32 dst_y = 0; dst_y < dst_height; dst_y++) {
             f32 src_y_f = (dst_y + 0.5f) * ratio_y;
