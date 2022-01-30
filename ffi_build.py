@@ -22,4 +22,4 @@ def build(lib_path, ext_path):
         libraries=['TinyScaler'],
     )
 
-    ffi.compile(verbose=True, target=os.path.join(ext_path, 'tinyscaler/_scaler_cffi.*'))
+    ffi.compile(target=os.path.join(ext_path, 'tinyscaler/_scaler_cffi.*'))
