@@ -169,20 +169,20 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
             i32 src_start10 = src_start00 + src_height * 4;
             i32 src_start11 = src_start10 + 4;
 
-            float interp_x1 = 1.0f - interp_x;
-            float interp_y1 = 1.0f - interp_y;
+            f32 interp_x1 = 1.0f - interp_x;
+            f32 interp_y1 = 1.0f - interp_y;
 
-            float pr0 = interp_x1 * src[src_start00    ] + interp_x * src[src_start10    ];
-            float pr1 = interp_x1 * src[src_start01    ] + interp_x * src[src_start11    ];
+            f32 pr0 = interp_x1 * src[src_start00    ] + interp_x * src[src_start10    ];
+            f32 pr1 = interp_x1 * src[src_start01    ] + interp_x * src[src_start11    ];
 
-            float pg0 = interp_x1 * src[src_start00 + 1] + interp_x * src[src_start10 + 1];
-            float pg1 = interp_x1 * src[src_start01 + 1] + interp_x * src[src_start11 + 1];
+            f32 pg0 = interp_x1 * src[src_start00 + 1] + interp_x * src[src_start10 + 1];
+            f32 pg1 = interp_x1 * src[src_start01 + 1] + interp_x * src[src_start11 + 1];
 
-            float pb0 = interp_x1 * src[src_start00 + 2] + interp_x * src[src_start10 + 2];
-            float pb1 = interp_x1 * src[src_start01 + 2] + interp_x * src[src_start11 + 2];
+            f32 pb0 = interp_x1 * src[src_start00 + 2] + interp_x * src[src_start10 + 2];
+            f32 pb1 = interp_x1 * src[src_start01 + 2] + interp_x * src[src_start11 + 2];
 
-            float pa0 = interp_x1 * src[src_start00 + 3] + interp_x * src[src_start10 + 3];
-            float pa1 = interp_x1 * src[src_start01 + 3] + interp_x * src[src_start11 + 3];
+            f32 pa0 = interp_x1 * src[src_start00 + 3] + interp_x * src[src_start10 + 3];
+            f32 pa1 = interp_x1 * src[src_start01 + 3] + interp_x * src[src_start11 + 3];
 
             dst[dst_start    ] = interp_y1 * pr0 + interp_y * pr1;
             dst[dst_start + 1] = interp_y1 * pg0 + interp_y * pg1;
