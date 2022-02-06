@@ -31,15 +31,15 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
     src_type = src.dtype
 
     # Automatic conversion
-    if dst is None and auto_convert:
+    if auto_convert:
         if len(src.shape) != 3:
             raise Exception('Incorrect number of dimensions - need 3, received ' + str(len(src.shape)))
 
         if src.dtype != np.float32:
+            src = src.astype(np.float32)
+
             if src.dtype == np.uint8:
-                src = src / 255.0
-            else:
-                src = src.astype(np.float32)
+                src /= 255.0
 
         src_channels = src.shape[2]
 

@@ -72,7 +72,7 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
             }
         }
     }
-    else {
+    else { // Unaligned memory
         for (i32 dst_x = 0; dst_x < dst_width; dst_x++) {
             f32 src_x_f = (dst_x + 0.5f) * ratio_x;
             i32 src_x = (i32)src_x_f;
