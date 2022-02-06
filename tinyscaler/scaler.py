@@ -39,7 +39,7 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
             src = src.astype(np.float32)
 
             if src.dtype == np.uint8:
-                src /= 255.0
+                src *= 1.0 / 255.0
 
         src_channels = src.shape[2]
 
