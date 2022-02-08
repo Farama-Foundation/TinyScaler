@@ -14,6 +14,11 @@ option(ENABLE_NEON "Enable Arm Neon support." Off)
 
 ############################################################################
 
+# Optimizations
+if ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang" OR "${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -march=native -ffast-math")
+endif()
+
 if(ENABLE_SIMD)
     message(STATUS "SIMD enabled.")
 
