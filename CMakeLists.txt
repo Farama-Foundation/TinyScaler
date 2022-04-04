@@ -33,3 +33,4 @@ if(ENABLE_SIMD)
 endif()
 
 add_library(TinyScaler "src/scaler.c")
+

@@ -9,7 +9,7 @@ def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarra
     if dst is None:
         length = size[0] * size[1] * 4
 
-        dst = np.ascontiguousarray(np.empty(length, dtype=np.float32))
+        dst = np.empty(length, dtype=np.float32)
     else:
         if len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] != size[1] or dst.shape[2] != 4:
             raise Exception('Incorrect dst size!')
@@ -17,7 +17,7 @@ def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarra
             raise Exception('Incorrect dst type (must be float32)!')
 
     src_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(src)))
-    dst_cptr = ffi.cast('f32*', ffi.from_buffer(dst))
+    dst_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(dst)))
 
     if mode == 'bilinear':
         lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
@@ -27,6 +27,9 @@ def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarra
     return dst.reshape((size[0], size[1], 4))
 
 def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
+    if not src.data.contiguous:
+        raise Exception('Input image must be continuous!')
+
     src_channels = 4
     src_type = src.dtype
 
@@ -36,10 +39,12 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
             raise Exception('Incorrect number of dimensions - need 3, received ' + str(len(src.shape)))
 
         if src.dtype != np.float32:
-            src = src.astype(np.float32)
-
             if src.dtype == np.uint8:
-                src *= 1.0 / 255.0
+                src = src.astype(np.float32)
+
+                src *= float(1.0 / 255.0)
+            else:
+                src = src.astype(np.float32)
 
         src_channels = src.shape[2]
 
@@ -70,7 +75,7 @@ def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = No
     # Covert back
     if auto_convert:
         if src_type == np.uint8:
-            result = (result * 255.0).astype(np.uint8)[:, :, :src_channels]
+            result = (result * float(255.0)).astype(np.uint8)[:, :, :src_channels]
         else:
             result = result[:, :, :src_channels].astype(src_type)
 
