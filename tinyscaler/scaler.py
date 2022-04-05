@@ -28,7 +28,7 @@ def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarra
 
 def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
     if not src.data.contiguous:
-        raise Exception('Input image must be continuous!')
+        raise Exception('Input image must be contiguous!')
 
     src_channels = 4
     src_type = src.dtype
