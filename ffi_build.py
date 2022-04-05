@@ -20,8 +20,6 @@ def build(lib_path, ext_path):
         ''',
         library_dirs=[lib_path],
         libraries=['TinyScaler'],
-        extra_compile_args=['-fopenmp'],
-        extra_link_args=['-fopenmp'],
     )
 
     ffi.compile(target=os.path.join(ext_path, 'tinyscaler/_scaler_cffi.*'))
