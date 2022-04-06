@@ -78,7 +78,6 @@ setup(
         'Environment :: Console',
         'Programming Language :: Python :: 3',
         'Intended Audience :: Science/Research',
-        'License :: MIT License',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules'
