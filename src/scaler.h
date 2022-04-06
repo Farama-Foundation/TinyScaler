@@ -5,19 +5,9 @@
 
 #if defined(ENABLE_SIMD)
 
-// Must define __ARM_NEON manually for some platforms
-#if defined(ENABLE_NEON) && !defined(__ARM_NEON)
-#define __ARM_NEON 1
-#endif
-
-// For backwards compatibility on Arm
-#if defined (__ARM_NEON__) && !defined(__ARM_NEON)
-#define __ARM_NEON 1
-#endif
-
 #if defined(__x86_64__)
 #include <pmmintrin.h> // SSE
-#elif defined(__ARM_NEON)
+#elif defined(__arm__)
 #include <arm_neon.h> // Neon
 #endif
 

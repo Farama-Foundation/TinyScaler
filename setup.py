@@ -9,25 +9,6 @@ from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 from setuptools.command.install import install
 
-enable_neon = False
-
-class InstallCommand(install):
-    user_options = install.user_options + [
-        ('enable_neon', None, None),
-    ]
-
-    def initialize_options(self):
-        install.initialize_options(self)
-        self.enable_neon = None
-
-    def finalize_options(self):
-        install.finalize_options(self)
-
-    def run(self):
-        global enable_neon
-        enable_neon = self.enable_neon
-        install.run(self)
-
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[
@@ -50,8 +31,7 @@ class CMakeBuild(build_ext):
             extdir += os.path.sep
 
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                      '-DPYTHON_EXECUTABLE=' + sys.executable,
-                      '-DENABLE_NEON=' + ('On' if enable_neon else 'Off')]
+                      '-DPYTHON_EXECUTABLE=' + sys.executable]
 
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
@@ -105,7 +85,6 @@ setup(
     ],
     ext_modules=[ CMakeExtension('tinyscaler') ],
     cmdclass={
-        'install': InstallCommand,
         'build_ext': CMakeBuild,
     },
     zip_safe=True,

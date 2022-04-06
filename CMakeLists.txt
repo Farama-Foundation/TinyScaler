@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
+include(CheckSymbolExists)
+
 project(TinyScaler)
  
 if(NOT CMAKE_BUILD_TYPE)
@@ -10,7 +12,6 @@ endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 option(ENABLE_SIMD "Enable SIMD support." On)
-option(ENABLE_NEON "Enable Arm Neon support." Off)
 
 ############################################################################
 
@@ -24,12 +25,15 @@ if(ENABLE_SIMD)
 
     add_compile_definitions(ENABLE_SIMD)
 
-    if(ENABLE_NEON)
-	message(STATUS "Neon support enabled.")
+    # Check if is ARM
+    check_symbol_exists(__arm__ "stdio.h" ARM_PLATFORM)
 
-	add_compile_definitions(ENABLE_NEON)
+    if(ARM_PLATFORM)
+	message(STATUS "ARM platform detected.")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon")
     endif()
+
 endif()
 
 add_library(TinyScaler "src/scaler.c")
+
