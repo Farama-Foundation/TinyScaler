@@ -110,7 +110,7 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
     }
 }
 
-#elif defined(__ARM_NEON) // ARM Neon implementation
+#elif defined(__arm__) // ARM Neon implementation
 
 void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
     f32 ratio_x = (f32)(src_width - 1) / (f32)dst_width;
