@@ -69,6 +69,7 @@ setup(
     install_requires=[
        'cffi',
        'numpy',
+       'cmake',
     ],
     packages=['tinyscaler'],
     package_dir={'tinyscaler': 'tinyscaler'},
