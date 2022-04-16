@@ -1,3 +1,4 @@
+# Benchmark between tinyscaler, OpenCV, Pillow, and skImage
 import numpy as np
 import tinyscaler
 import cv2
@@ -5,9 +6,11 @@ import time
 from PIL import Image
 from skimage.transform import resize
 
+# Disable multithreading and GPU support for OpenCV for a single-threaded CPU comparison
 cv2.setNumThreads(1)
 cv2.ocl.setUseOpenCL(False)
 
+# Number of scales to perform
 numScales = 100
 
 # Loading this image: https://github.com/Cykooz/fast_image_resize/blob/main/data/nasa-4928x3279.png
