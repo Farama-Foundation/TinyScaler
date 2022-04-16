@@ -27,6 +27,33 @@ def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarra
     return dst.reshape((size[0], size[1], 4))
 
 def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
+    '''
+    scale (resize) a source image to a specified size
+
+    Parameters
+    ----------
+    src : numpy.ndarray
+        the source array, must have len(src.shape) == 2 or len(src.shape) == 3. Must be contiguous (using numpy.ascontiguousarray if not already).
+        Ideally (most efficient) the shape is (width, height, 4) with dtype=numpy.float32 (others will cause a conversion to occur)
+    size :
+        target size, a tuple of two positive integers (width, height)
+    mode : {'bilinear', 'nearest'}, optional
+        interpolation method to use. Defaults to bilinar, can also be nearest
+    dst : {None}, optional
+        destination buffer to put resized image in. Leaving this = None will result in an allocation.
+        For efficient code, set dst to a buffer of shape (size[0], size[1], 4) with dtype=numpy.float32
+
+    Returns
+    -------
+    numpy.ndarray
+        the scaled image
+
+    Raises
+    ------
+    Exception
+        when src is not contiguous or the wrong shape
+    '''
+
     if not src.data.contiguous:
         raise Exception('Input image must be contiguous!')
 
