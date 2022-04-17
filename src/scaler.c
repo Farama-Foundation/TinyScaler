@@ -61,10 +61,10 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
                 __m128 p10 = _mm_load_ps(src_start00 + src_width4);
                 __m128 p11 = _mm_load_ps(src_start00 + src_width4_4);
 
-                p00 = _mm_add_ps(_mm_mul_ps(p00, ix1), _mm_mul_ps(p10, ix));
-                p01 = _mm_add_ps(_mm_mul_ps(p01, ix1), _mm_mul_ps(p11, ix));
+                p00 = _mm_add_ps(_mm_mul_ps(p00, iy1), _mm_mul_ps(p10, iy));
+                p01 = _mm_add_ps(_mm_mul_ps(p01, iy1), _mm_mul_ps(p11, iy));
 
-                p00 = _mm_add_ps(_mm_mul_ps(p00, iy1), _mm_mul_ps(p01, iy));
+                p00 = _mm_add_ps(_mm_mul_ps(p00, ix1), _mm_mul_ps(p01, ix));
 
                 _mm_store_ps(dst + dst_start, p00);
             }
@@ -99,10 +99,10 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
                 __m128 p10 = _mm_loadu_ps(src_start00 + src_width4);
                 __m128 p11 = _mm_loadu_ps(src_start00 + src_width4_4);
 
-                p00 = _mm_add_ps(_mm_mul_ps(p00, ix1), _mm_mul_ps(p10, ix));
-                p01 = _mm_add_ps(_mm_mul_ps(p01, ix1), _mm_mul_ps(p11, ix));
+                p00 = _mm_add_ps(_mm_mul_ps(p00, iy1), _mm_mul_ps(p10, iy));
+                p01 = _mm_add_ps(_mm_mul_ps(p01, iy1), _mm_mul_ps(p11, iy));
 
-                p00 = _mm_add_ps(_mm_mul_ps(p00, iy1), _mm_mul_ps(p01, iy));
+                p00 = _mm_add_ps(_mm_mul_ps(p00, ix1), _mm_mul_ps(p01, ix));
 
                 _mm_storeu_ps(dst + dst_start, p00);
             }
@@ -147,10 +147,10 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
             float32x4_t p10 = vld1q_f32(src_start00 + src_width4);
             float32x4_t p11 = vld1q_f32(src_start00 + src_width4_4);
 
-            p00 = vaddq_f32(vmulq_f32(p00, ix1), vmulq_f32(p10, ix));
-            p01 = vaddq_f32(vmulq_f32(p01, ix1), vmulq_f32(p11, ix));
+            p00 = vaddq_f32(vmulq_f32(p00, iy1), vmulq_f32(p10, iy));
+            p01 = vaddq_f32(vmulq_f32(p01, iy1), vmulq_f32(p11, iy));
 
-            p00 = vaddq_f32(vmulq_f32(p00, iy1), vmulq_f32(p01, iy));
+            p00 = vaddq_f32(vmulq_f32(p00, ix1), vmulq_f32(p01, ix));
 
             vst1q_f32(dst + dst_start, p00);
         }
@@ -194,22 +194,22 @@ void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i3
 
             f32 interp_x1 = 1.0f - interp_x;
 
-            f32 pr0 = interp_x1 * src[src_start00    ] + interp_x * src[src_start00 + src_width4s[0]];
-            f32 pr1 = interp_x1 * src[src_start00 + 4] + interp_x * src[src_start00 + src_width4s[4]];
+            f32 pr0 = interp_y1 * src[src_start00    ] + interp_y * src[src_start00 + src_width4s[0]];
+            f32 pr1 = interp_y1 * src[src_start00 + 4] + interp_y * src[src_start00 + src_width4s[4]];
 
-            f32 pg0 = interp_x1 * src[src_start00 + 1] + interp_x * src[src_start00 + src_width4s[1]];
-            f32 pg1 = interp_x1 * src[src_start00 + 5] + interp_x * src[src_start00 + src_width4s[5]];
+            f32 pg0 = interp_y1 * src[src_start00 + 1] + interp_y * src[src_start00 + src_width4s[1]];
+            f32 pg1 = interp_y1 * src[src_start00 + 5] + interp_y * src[src_start00 + src_width4s[5]];
 
-            f32 pb0 = interp_x1 * src[src_start00 + 2] + interp_x * src[src_start00 + src_width4s[2]];
-            f32 pb1 = interp_x1 * src[src_start00 + 6] + interp_x * src[src_start00 + src_width4s[6]];
+            f32 pb0 = interp_y1 * src[src_start00 + 2] + interp_y * src[src_start00 + src_width4s[2]];
+            f32 pb1 = interp_y1 * src[src_start00 + 6] + interp_y * src[src_start00 + src_width4s[6]];
 
-            f32 pa0 = interp_x1 * src[src_start00 + 3] + interp_x * src[src_start00 + src_width4s[3]];
-            f32 pa1 = interp_x1 * src[src_start00 + 7] + interp_x * src[src_start00 + src_width4s[7]];
+            f32 pa0 = interp_y1 * src[src_start00 + 3] + interp_y * src[src_start00 + src_width4s[3]];
+            f32 pa1 = interp_y1 * src[src_start00 + 7] + interp_y * src[src_start00 + src_width4s[7]];
 
-            dst[dst_start    ] = interp_y1 * pr0 + interp_y * pr1;
-            dst[dst_start + 1] = interp_y1 * pg0 + interp_y * pg1;
-            dst[dst_start + 2] = interp_y1 * pb0 + interp_y * pb1;
-            dst[dst_start + 3] = interp_y1 * pa0 + interp_y * pa1;
+            dst[dst_start    ] = interp_x1 * pr0 + interp_x * pr1;
+            dst[dst_start + 1] = interp_x1 * pg0 + interp_x * pg1;
+            dst[dst_start + 2] = interp_x1 * pb0 + interp_x * pb1;
+            dst[dst_start + 3] = interp_x1 * pa0 + interp_x * pa1;
         }
     }
 }
