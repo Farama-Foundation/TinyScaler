@@ -14,17 +14,17 @@ cv2.ocl.setUseOpenCL(False)
 numScales = 100
 
 # Loading this image: https://github.com/Cykooz/fast_image_resize/blob/main/data/nasa-4928x3279.png
-img8 = np.ascontiguousarray(np.swapaxes(cv2.cvtColor(cv2.imread("nasa-4928x3279.png"), cv2.COLOR_BGR2RGBA), 0, 1))
+img8 = np.ascontiguousarray(cv2.cvtColor(cv2.imread("nasa-4928x3279.png"), cv2.COLOR_BGR2RGBA))
 img = (img8 / 255.0).astype(np.float32) # Preferred format
 
 targetSize = (852, 567)
 
-dst = np.empty((targetSize[0], targetSize[1], 4), dtype=np.float32)
+dst = np.empty((targetSize[1], targetSize[0], 4), dtype=np.float32)
 
 start = time.perf_counter()
 
 for t in range(numScales):
-    tinyscaler.scale(img, targetSize, dst=dst)
+    tinyscaler.scale(img, targetSize, mode='bilinear', dst=dst)
 
 end = time.perf_counter()
 
@@ -39,6 +39,8 @@ for t in range(numScales):
     cv2.resize(img, targetSize, dst=dst, interpolation=cv2.INTER_LINEAR)
 
 end = time.perf_counter()
+
+cv2.imwrite("result_cv.png", cv2.cvtColor((dst * 255.0).astype(np.uint8), cv2.COLOR_RGBA2BGR))
 
 print("Time elapsed for OpenCV: " + str(end - start))
 

@@ -11,7 +11,7 @@ def _scale_4f32(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray =
 
         dst = np.empty(length, dtype=np.float32)
     else:
-        if len(dst.shape) != 3 or dst.shape[0] != size[0] or dst.shape[1] != size[1] or dst.shape[2] != 4:
+        if len(dst.shape) != 3 or dst.shape[0] != size[1] or dst.shape[1] != size[0] or dst.shape[2] != 4:
             raise Exception('Incorrect dst size!')
         elif dst.dtype != np.float32:
             raise Exception('Incorrect dst type (must be float32)!')
@@ -20,11 +20,11 @@ def _scale_4f32(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray =
     dst_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(dst)))
 
     if mode == 'bilinear':
-        lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
+        lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
     else:
-        lib.scale_nearest_4f32(src_cptr, dst_cptr, src.shape[0], src.shape[1], size[0], size[1])
+        lib.scale_nearest_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
 
-    return dst.reshape((size[0], size[1], 4))
+    return dst.reshape((size[1], size[0], 4))
 
 def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None) -> np.ndarray:
     '''
