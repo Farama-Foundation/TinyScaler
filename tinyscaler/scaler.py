@@ -3,7 +3,7 @@ from ._scaler_cffi import ffi, lib
 
 auto_convert = True # Global controlling whether automatic channel/type conversions take place
 
-def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
+def _scale_4f32(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None) -> np.ndarray:
     assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
 
     if dst is None:
@@ -26,7 +26,7 @@ def _scale_4f32(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarra
 
     return dst.reshape((size[0], size[1], 4))
 
-def scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None):
+def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None) -> np.ndarray:
     '''
     scale (resize) a source image to a specified size
 
