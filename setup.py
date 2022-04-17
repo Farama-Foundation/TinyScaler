@@ -87,7 +87,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='tinyscaler',
-    version='1.0.3',
+    version='1.0.4',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[
