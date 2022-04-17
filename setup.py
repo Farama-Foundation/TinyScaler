@@ -9,6 +9,32 @@ from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 from setuptools.command.install import install
 
+from cffi import FFI
+import os.path
+
+def ffi_build(lib_path, ext_path):
+    ffi = FFI()
+
+    ffi.cdef('''
+        typedef unsigned char u8;
+        typedef int i32;
+        typedef float f32;
+        typedef double f64;
+
+        void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height);
+        void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height);
+    ''')
+
+    ffi.set_source('_scaler_cffi',
+        '''
+            #include "src/scaler.h"
+        ''',
+        library_dirs=[lib_path],
+        libraries=['TinyScaler'],
+    )
+
+    ffi.compile(target=os.path.join(ext_path, 'tinyscaler/_scaler_cffi.*'))
+
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[
@@ -57,13 +83,11 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
         # Call manually due to ill-defined order when using cffi_modules
-        import ffi_build
-
-        ffi_build.build(self.build_temp, extdir)
+        ffi_build(self.build_temp, extdir)
 
 setup(
     name='tinyscaler',
-    version='1.0.1',
+    version='1.0.4',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[

@@ -53,7 +53,7 @@ Time elapsed for Pillow: 12.672875003999707
 Time elapsed for skimage: 164.45401711399973
 ```
 
-All methods were forced to use a single thread. OpenCV is slightly faster than TinyScaler, but TinyScaler remains very fast regardless.
+All methods were forced to use a single thread. OpenCV is slightly faster than TinyScaler, but TinyScaler remains very fast regardless. OpenCV uses an additional hardware acceleration layer (HAL) when OpenCL is disabled, which allows it to still be a bit faster.
 
 ## License
 
