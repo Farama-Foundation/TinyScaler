@@ -57,13 +57,14 @@ def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None)
     if not src.data.contiguous:
         raise Exception('Input image must be contiguous!')
 
+    src_dims = len(src.shape)
     src_channels = 4
     src_type = src.dtype
 
     # Automatic conversion
     if auto_convert:
-        if len(src.shape) != 3:
-            raise Exception('Incorrect number of dimensions - need 3, received ' + str(len(src.shape)))
+        if len(src.shape) != 2 and len(src.shape) != 3:
+            raise Exception('Incorrect number of dimensions - need 2 or 3, received ' + str(len(src.shape)))
 
         if src.dtype != np.float32:
             if src.dtype == np.uint8:
@@ -73,9 +74,12 @@ def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None)
             else:
                 src = src.astype(np.float32)
 
-        src_channels = src.shape[2]
+        if len(src.shape) == 2 or src.shape[2] == 1: # Gray
+            if len(src.shape) == 3:
+                src = src.reshape((src.shape[0], src.shape[1]))
 
-        if src.shape[2] == 1: # Gray
+            src_channels = 1
+
             src_new = np.empty((src.shape[0], src.shape[1], 4), dtype=np.float32)
             src_new[:, :, 0] = src
             src_new[:, :, 1] = src
@@ -84,6 +88,8 @@ def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None)
 
             src = src_new
         elif src.shape[2] == 3: # RGB
+            src_channels = 3
+
             src_new = np.empty((src.shape[0], src.shape[1], 4), dtype=np.float32)
             src_new[:, :, :3] = src
             src_new[:, :, 3] = np.ones((src.shape[0], src.shape[1]))
@@ -105,5 +111,8 @@ def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None)
             result = (result * float(255.0)).astype(np.uint8)[:, :, :src_channels]
         else:
             result = result[:, :, :src_channels].astype(src_type)
+
+        if src_dims == 2:
+            result = result.reshape((size[1], size[0]))
 
     return result

@@ -14,7 +14,7 @@ cv2.ocl.setUseOpenCL(False)
 numScales = 100
 
 # Loading this image: https://github.com/Cykooz/fast_image_resize/blob/main/data/nasa-4928x3279.png
-img8 = np.ascontiguousarray(cv2.cvtColor(cv2.imread("nasa-4928x3279.png"), cv2.COLOR_BGR2RGBA))
+img8 = cv2.cvtColor(cv2.imread("nasa-4928x3279.png"), cv2.COLOR_BGR2GRAY)
 img = (img8 / 255.0).astype(np.float32) # Preferred format
 
 targetSize = (852, 567)
