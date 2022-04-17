@@ -44,7 +44,7 @@ Finally, downscaling is the focus of TinyScaler. It can also upscale, but it wil
 
 ## Performance
 
-In a simple benchmark, we resized the same image (4928x3279) down to (852x567) 100 times using bilinear filtering with several libraries. Here are the times (in seconds) spent (measured with Python's perf_counter) on a AMD 1950x:
+In a [simple benchmark](./examples/benchmark.py), we resized the same image (4928x3279) down to (852x567) 100 times using bilinear filtering with several libraries. Here are the times (in seconds) spent (measured with Python's perf_counter) on a AMD 1950x:
 
 ```
 Time elapsed for tinyscaler: 0.7968465110002398
