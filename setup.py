@@ -9,10 +9,11 @@ from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 from setuptools.command.install import install
 
-from cffi import FFI
 import os.path
 
 def ffi_build(lib_path, ext_path):
+    from cffi import FFI
+
     ffi = FFI()
 
     ffi.cdef('''
@@ -87,7 +88,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='tinyscaler',
-    version='1.0.4',
+    version='1.0.5',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[
