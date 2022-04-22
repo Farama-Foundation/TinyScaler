@@ -24,6 +24,7 @@ def ffi_build(lib_path, ext_path):
 
         void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height);
         void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height);
+        void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height);
     ''')
 
     ffi.set_source('_scaler_cffi',
@@ -88,7 +89,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='tinyscaler',
-    version='1.0.5',
+    version='1.1.0',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[
