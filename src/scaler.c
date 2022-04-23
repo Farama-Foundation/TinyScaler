@@ -124,8 +124,8 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             i32 src_lower_y = max(0, (i32)src_lower_y_f);
             i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
-            f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
-            f32 over_height1 = 1.0f - over_height;
+            f32 over_height = src_lower_y_f - (i32)src_lower_y_f;
+            f32 over_height1 = 1.0f - (src_upper_y_f - (i32)src_lower_y_f);
 
             i32 dst_offset4 = dst_width4 * dst_y;
 
@@ -134,10 +134,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
                 f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
                 i32 src_lower_x = max(0, (i32)src_lower_x_f);
-                i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
+                i32 src_upper_x = min(src_width, (i32)src_upper_x_f + 1);
 
-                f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
-                f32 over_width1 = 1.0f - over_width;
+                f32 over_width = src_lower_x_f - (i32)src_lower_x_f;
+                f32 over_width1 = 1.0f - (src_upper_x_f - (i32)src_lower_x_f);
 
                 i32 dst_start = (dst_x << 2) + dst_offset4;
 
@@ -177,8 +177,8 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             i32 src_lower_y = max(0, (i32)src_lower_y_f);
             i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
-            f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
-            f32 over_height1 = 1.0f - over_height;
+            f32 over_height = src_lower_y_f - (i32)src_lower_y_f;
+            f32 over_height1 = 1.0f - (src_upper_y_f - (i32)src_lower_y_f);
 
             i32 dst_offset4 = dst_width4 * dst_y;
 
@@ -187,10 +187,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
                 f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
                 i32 src_lower_x = max(0, (i32)src_lower_x_f);
-                i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
+                i32 src_upper_x = min(src_width, (i32)src_upper_x_f + 1);
 
-                f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
-                f32 over_width1 = 1.0f - over_width;
+                f32 over_width = src_lower_x_f - (i32)src_lower_x_f;
+                f32 over_width1 = 1.0f - (src_upper_x_f - (i32)src_lower_x_f);
 
                 i32 dst_start = (dst_x << 2) + dst_offset4;
 
@@ -284,8 +284,8 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
         i32 src_lower_y = max(0, (i32)src_lower_y_f);
         i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
-        f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
-        f32 over_height1 = 1.0f - over_height;
+        f32 over_height = src_lower_y_f - (i32)src_lower_y_f;
+        f32 over_height1 = 1.0f - (src_upper_y_f - (i32)src_lower_y_f);
 
         i32 dst_offset4 = dst_width4 * dst_y;
 
@@ -294,10 +294,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
             i32 src_lower_x = max(0, (i32)src_lower_x_f);
-            i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
+            i32 src_upper_x = min(src_width, (i32)src_upper_x_f + 1);
 
-            f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
-            f32 over_width1 = 1.0f - over_width;
+            f32 over_width = src_lower_x_f - (i32)src_lower_x_f;
+            f32 over_width1 = 1.0f - (src_upper_x_f - (i32)src_lower_x_f);
 
             i32 dst_start = (dst_x << 2) + dst_offset4;
 
@@ -400,8 +400,8 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
         i32 src_lower_y = max(0, (i32)src_lower_y_f);
         i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
-        f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
-        f32 over_height1 = 1.0f - over_height;
+        f32 over_height = src_lower_y_f - (i32)src_lower_y_f;
+        f32 over_height1 = 1.0f - (src_upper_y_f - (i32)src_lower_y_f);
 
         i32 dst_offset4 = dst_width4 * dst_y;
 
@@ -410,10 +410,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
             i32 src_lower_x = max(0, (i32)src_lower_x_f);
-            i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
+            i32 src_upper_x = min(src_width, (i32)src_upper_x_f + 1);
 
-            f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
-            f32 over_width1 = 1.0f - over_width;
+            f32 over_width = src_lower_x_f - (i32)src_lower_x_f;
+            f32 over_width1 = 1.0f - (src_upper_x_f - (i32)src_lower_x_f);
 
             i32 dst_start = (dst_x << 2) + dst_offset4;
 
