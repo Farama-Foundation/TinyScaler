@@ -122,7 +122,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             f32 src_upper_y_f = (dst_y + 1.0f) * ratio_y;
 
             i32 src_lower_y = max(0, (i32)src_lower_y_f);
-            i32 src_upper_y = min(src_height - 1, (i32)src_upper_y_f);
+            i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
             f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
             f32 over_height1 = 1.0f - over_height;
@@ -134,7 +134,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
                 f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
                 i32 src_lower_x = max(0, (i32)src_lower_x_f);
-                i32 src_upper_x = min(src_width - 1, (i32)src_upper_x_f);
+                i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
 
                 f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
                 f32 over_width1 = 1.0f - over_width;
@@ -145,10 +145,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
 
                 f32 weight_total = 0.0f;
 
-                for (i32 area_y = src_lower_y; area_y <= src_upper_y; area_y++) {
+                for (i32 area_y = src_lower_y; area_y < src_upper_y; area_y++) {
                     i32 src_offset4 = src_width4 * area_y;
 
-                    for (i32 area_x = src_lower_x; area_x <= src_upper_x; area_x++) {
+                    for (i32 area_x = src_lower_x; area_x < src_upper_x; area_x++) {
                         f32 weight = (1.0f - (area_y == src_lower_y) * over_height) * (1.0f - (area_x == src_lower_x) * over_width) +
                             (1.0f - (area_y == src_upper_y) * over_height1) * (1.0f - (area_x == src_upper_x) * over_width1);
 
@@ -175,7 +175,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             f32 src_upper_y_f = (dst_y + 1.0f) * ratio_y;
 
             i32 src_lower_y = max(0, (i32)src_lower_y_f);
-            i32 src_upper_y = min(src_height - 1, (i32)src_upper_y_f);
+            i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
             f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
             f32 over_height1 = 1.0f - over_height;
@@ -187,7 +187,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
                 f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
                 i32 src_lower_x = max(0, (i32)src_lower_x_f);
-                i32 src_upper_x = min(src_width - 1, (i32)src_upper_x_f);
+                i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
 
                 f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
                 f32 over_width1 = 1.0f - over_width;
@@ -198,10 +198,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
 
                 f32 weight_total = 0.0f;
 
-                for (i32 area_y = src_lower_y; area_y <= src_upper_y; area_y++) {
+                for (i32 area_y = src_lower_y; area_y < src_upper_y; area_y++) {
                     i32 src_offset4 = src_width4 * area_y;
 
-                    for (i32 area_x = src_lower_x; area_x <= src_upper_x; area_x++) {
+                    for (i32 area_x = src_lower_x; area_x < src_upper_x; area_x++) {
                         f32 weight = (1.0f - (area_y == src_lower_y) * over_height) * (1.0f - (area_x == src_lower_x) * over_width) +
                             (1.0f - (area_y == src_upper_y) * over_height1) * (1.0f - (area_x == src_upper_x) * over_width1);
 
@@ -282,7 +282,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
         f32 src_upper_y_f = (dst_y + 1.0f) * ratio_y;
 
         i32 src_lower_y = max(0, (i32)src_lower_y_f);
-        i32 src_upper_y = min(src_height - 1, (i32)src_upper_y_f);
+        i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
         f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
         f32 over_height1 = 1.0f - over_height;
@@ -294,7 +294,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
             i32 src_lower_x = max(0, (i32)src_lower_x_f);
-            i32 src_upper_x = min(src_width - 1, (i32)src_upper_x_f);
+            i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
 
             f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
             f32 over_width1 = 1.0f - over_width;
@@ -305,10 +305,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
 
             f32 weight_total = 0.0f;
 
-            for (i32 area_y = src_lower_y; area_y <= src_upper_y; area_y++) {
+            for (i32 area_y = src_lower_y; area_y < src_upper_y; area_y++) {
                 i32 src_offset4 = src_width4 * area_y;
 
-                for (i32 area_x = src_lower_x; area_x <= src_upper_x; area_x++) {
+                for (i32 area_x = src_lower_x; area_x < src_upper_x; area_x++) {
                     f32 weight = (1.0f - (area_y == src_lower_y) * over_height) * (1.0f - (area_x == src_lower_x) * over_width) +
                         (1.0f - (area_y == src_upper_y) * over_height1) * (1.0f - (area_x == src_upper_x) * over_width1);
 
@@ -398,7 +398,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
         f32 src_upper_y_f = (dst_y + 1.0f) * ratio_y;
 
         i32 src_lower_y = max(0, (i32)src_lower_y_f);
-        i32 src_upper_y = min(src_height - 1, (i32)src_upper_y_f);
+        i32 src_upper_y = min(src_height, (i32)src_upper_y_f);
 
         f32 over_height = src_lower_y_f - (i32)(src_lower_y_f);
         f32 over_height1 = 1.0f - over_height;
@@ -410,7 +410,7 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
             f32 src_upper_x_f = (dst_x + 1.0f) * ratio_x;
 
             i32 src_lower_x = max(0, (i32)src_lower_x_f);
-            i32 src_upper_x = min(src_width - 1, (i32)src_upper_x_f);
+            i32 src_upper_x = min(src_width, (i32)src_upper_x_f);
 
             f32 over_width = src_lower_x_f - (i32)(src_lower_x_f);
             f32 over_width1 = 1.0f - over_width;
@@ -424,10 +424,10 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
 
             f32 weight_total = 0.0f;
 
-            for (i32 area_y = src_lower_y; area_y <= src_upper_y; area_y++) {
+            for (i32 area_y = src_lower_y; area_y < src_upper_y; area_y++) {
                 i32 src_offset4 = src_width4 * area_y;
 
-                for (i32 area_x = src_lower_x; area_x <= src_upper_x; area_x++) {
+                for (i32 area_x = src_lower_x; area_x < src_upper_x; area_x++) {
                     f32 weight = (1.0f - (area_y == src_lower_y) * over_height) * (1.0f - (area_x == src_lower_x) * over_width) +
                         (1.0f - (area_y == src_upper_y) * over_height1) * (1.0f - (area_x == src_upper_x) * over_width1);
 
