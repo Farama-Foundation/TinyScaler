@@ -3,7 +3,7 @@ from ._scaler_cffi import ffi, lib
 
 auto_convert = True # Global controlling whether automatic channel/type conversions take place
 
-def _scale_4f32(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None) -> np.ndarray:
+def _scale_4f32(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
     assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
 
     if dst is None:
@@ -21,12 +21,14 @@ def _scale_4f32(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray =
 
     if mode == 'bilinear':
         lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
+    elif mode == 'area':
+        lib.scale_area_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
     else:
         lib.scale_nearest_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
 
     return dst.reshape((size[1], size[0], 4))
 
-def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None) -> np.ndarray:
+def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
     '''
     scale (resize) a source image to a specified size
 
@@ -37,8 +39,8 @@ def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None)
         Ideally (most efficient) the shape is (width, height, 4) with dtype=numpy.float32 (others will cause a conversion to occur)
     size :
         target size, a tuple of two positive integers (width, height)
-    mode : {'bilinear', 'nearest'}, optional
-        interpolation method to use. Defaults to bilinar, can also be nearest
+    mode : {'area', 'bilinear', 'nearest'}, optional
+        interpolation method to use. Defaults to area, can also be bilinear or nearest
     dst : {None}, optional
         destination buffer to put resized image in. Leaving this = None will result in an allocation.
         For efficient code, set dst to a buffer of shape (size[0], size[1], 4) with dtype=numpy.float32
@@ -60,6 +62,9 @@ def scale(src: np.ndarray, size: tuple, mode='bilinear', dst: np.ndarray = None)
     src_dims = len(src.shape)
     src_channels = 4
     src_type = src.dtype
+
+    if mode == 'area' and (src.shape[1] < size[0] or src.shape[0] < size[1]):
+        mode = 'bilinear' # Switch to bilinear if upscaling with area filter, as area filter only applies to downscaling
 
     # Automatic conversion
     if auto_convert:

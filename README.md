@@ -28,12 +28,16 @@ print(tinyscaler.scale(img, (32, 32)))
 
 ## Notes
 
-TinyScaler supports mode='nearest' and mode='bilinear' filtering. It also allows one to pass a destination buffer in order to avoid duplicate memory allocations.
+**New since 1.1.0: Supports area filtering. It is now the default filtering method as well**
+
+TinyScaler supports mode='area', mode='bilinear', and mode='nearest' filtering. It also allows one to pass a destination buffer in order to avoid duplicate memory allocations.
+
+Area filtering is only really useful for downscaling, bilinear will be used even when area filtering is set if upscaling. Area filtering is also likely not worth it when downscaling less than or equal to 2x.
 
 TinyScaler is used through a single function. The full signature is:
 
 ```python
-scale(src : np.ndarray, size : tuple, mode='bilinear', dst : np.ndarray = None)
+scale(src : np.ndarray, size : tuple, mode='area', dst : np.ndarray = None)
 ```
 
 TinyScaler expects a contiguous numpy array. If it is not contiguous, it will throw an error. You can make a non-contiguous numpy array contiguous by calling np.ascontiguousarray.
