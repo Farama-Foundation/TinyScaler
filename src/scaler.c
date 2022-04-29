@@ -21,8 +21,6 @@ void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32
     }
 }
 
-#if defined(ENABLE_SIMD)
-
 #if defined(__x86_64__) // SSE implementation
 
 void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height) {
@@ -329,10 +327,6 @@ void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 ds
         }
     }
 }
-
-#else
-#error *** SIMD Enabled but no support found! ***
-#endif
 
 #else // No SIMD implementation
 
