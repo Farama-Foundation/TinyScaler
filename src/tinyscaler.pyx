@@ -17,7 +17,7 @@ import numpy as np
 
 auto_convert = True # Global controlling whether automatic channel/type conversions take place
 
-def _scale_4f32(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
+def _scale_4f32(src: np.ndarray, size: tuple, mode: str = 'area', dst: np.ndarray = None) -> np.ndarray:
     assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
 
     if not src.flags['C_CONTIGUOUS']:
@@ -48,7 +48,7 @@ def _scale_4f32(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = Non
     return dst.reshape((size[1], size[0], 4))
 
 @cython.binding(True)
-def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
+def scale(src: np.ndarray, size: tuple, mode: str = 'area', dst: np.ndarray = None) -> np.ndarray:
     '''
     scale (resize) a source image to a specified size
 
@@ -59,7 +59,7 @@ def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> 
         Ideally (most efficient) the shape is (width, height, 4) with dtype=numpy.float32 (others will cause a conversion to occur)
     size :
         target size, a tuple of two positive integers (width, height)
-    mode : {'area', 'bilinear', 'nearest'}, optional
+    mode : {'area', 'bilinear', 'nearest'}
         interpolation method to use. Defaults to area, can also be bilinear or nearest
     dst : {None}, optional
         destination buffer to put resized image in. Leaving this = None will result in an allocation.
