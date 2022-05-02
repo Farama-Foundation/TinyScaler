@@ -1,3 +1,5 @@
+import cython
+
 cdef extern from "scaler.c":
     pass
 
@@ -45,6 +47,7 @@ def _scale_4f32(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = Non
 
     return dst.reshape((size[1], size[0], 4))
 
+@cython.binding(True)
 def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
     '''
     scale (resize) a source image to a specified size
@@ -74,7 +77,7 @@ def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> 
     '''
 
     if not src.data.contiguous:
-        raise Exception('Input image must be contiguous!')
+        raise Exception('Input image must be contiguous! Use np.ascontiguousarray(image) maybe?')
 
     src_dims = len(src.shape)
     src_channels = 4
