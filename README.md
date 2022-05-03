@@ -40,7 +40,7 @@ TinyScaler is used through a single function. The full signature is:
 scale(src : np.ndarray, size : tuple, mode='area', dst : np.ndarray = None)
 ```
 
-TinyScaler expects a contiguous numpy array. If it is not contiguous, it will throw an error. You can make a non-contiguous numpy array contiguous by calling np.ascontiguousarray.
+TinyScaler expects a contiguous numpy array. If it is not contiguous, it will throw an error. You can make a non-contiguous numpy array contiguous by calling np.ascontiguousarray. Usually a numpy array will already be contiguous.
 
 If the final array dimension is not 4 (RGBA), it will automatically convert to it. Further, if the array is uint8, it will be converted to float32. So the prefered array has a shape (width, height, 4) and dtype=np.float32.
 
