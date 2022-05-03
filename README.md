@@ -27,6 +27,7 @@ print(tinyscaler.scale(img, (32, 32)))
 
 ## Notes
 
+**New since 1.2.0: Simpler Cython build**
 **New since 1.1.0: Supports area filtering. It is now the default filtering method as well**
 
 TinyScaler supports mode='area', mode='bilinear', and mode='nearest' filtering. It also allows one to pass a destination buffer in order to avoid duplicate memory allocations.
@@ -56,11 +57,17 @@ Time elapsed for Pillow: 12.672875003999707
 Time elapsed for skimage: 164.45401711399973
 ```
 
-All methods were forced to use a single thread. OpenCV is slightly faster than TinyScaler, but TinyScaler remains very fast regardless. OpenCV uses an additional hardware acceleration layer (HAL) when OpenCL is disabled, which allows it to still be a bit faster.
+And with area filtering (just TinyScaler and OpenCV):
+
+```
+Time elapsed for tinyscaler: 4.34793155800071
+Time elapsed for OpenCV: 8.118138265999733
+```
+
+All methods were forced to use a single thread. OpenCV is slightly faster than TinyScaler for bilinear filtering, but TinyScaler remains very fast regardless.
+
+Interestingly, for area filtering, TinyScaler is faster (almost 2x).
 
 ## License
 
 MIT License, see [LICENSE.md](./LICENSE.md)
-
-
-

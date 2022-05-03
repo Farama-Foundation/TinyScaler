@@ -1,4 +1,4 @@
-# Benchmark between tinyscaler, OpenCV, Pillow, and skImage
+# Benchmark between tinyscaler, OpenCV, Pillow, and skImage using bilinear filtering
 import numpy as np
 import tinyscaler
 import cv2
