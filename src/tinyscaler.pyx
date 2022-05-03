@@ -59,7 +59,7 @@ def scale(src: np.ndarray, size: tuple, mode: str = 'area', dst: np.ndarray = No
         Ideally (most efficient) the shape is (width, height, 4) with dtype=numpy.float32 (others will cause a conversion to occur)
     size :
         target size, a tuple of two positive integers (width, height)
-    mode : {'area', 'bilinear', 'nearest'}
+    mode : {'area', 'bilinear', 'nearest'}, optional
         interpolation method to use. Defaults to area, can also be bilinear or nearest
     dst : {None}, optional
         destination buffer to put resized image in. Leaving this = None will result in an allocation.

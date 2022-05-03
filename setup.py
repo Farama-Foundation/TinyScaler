@@ -15,7 +15,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
-    ext_modules=cythonize('src/*.pyx', language_level=3),
+    ext_modules=cythonize('src/*.pyx', language_level=3, compiler_directives={'annotation_typing': False}),
     zip_safe=True,
     include_package_data=True,
 )
