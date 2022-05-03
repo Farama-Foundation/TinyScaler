@@ -28,6 +28,7 @@ print(tinyscaler.scale(img, (32, 32)))
 ## Notes
 
 **New since 1.2.0: Simpler Cython build**
+
 **New since 1.1.0: Supports area filtering. It is now the default filtering method as well**
 
 TinyScaler supports mode='area', mode='bilinear', and mode='nearest' filtering. It also allows one to pass a destination buffer in order to avoid duplicate memory allocations.
