@@ -28,7 +28,6 @@ setup(
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[
        'numpy',
-       'Cython',
     ],
     license='MIT',
     classifiers=[
