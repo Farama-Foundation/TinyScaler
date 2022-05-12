@@ -4,14 +4,10 @@
 #include <math.h>
 #include <memory.h>
 
-#if defined(ENABLE_SIMD)
-
 #if defined(__x86_64__)
 #include <pmmintrin.h> // SSE
 #elif defined(__arm__)
 #include <arm_neon.h> // Neon
-#endif
-
 #endif
 
 #define RGBA32F_SIZE 16 // Byte size of a pixel

@@ -1,34 +1,54 @@
+import cython
+
+cdef extern from "scaler.c":
+    pass
+
+cdef extern from "scaler.h":
+    ctypedef unsigned char u8;
+    ctypedef int i32;
+    ctypedef float f32;
+    ctypedef double f64;
+
+    void scale_nearest_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height)
+    void scale_bilinear_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height)
+    void scale_area_4f32(f32 src[], f32 dst[], i32 src_width, i32 src_height, i32 dst_width, i32 dst_height)
+
 import numpy as np
-from ._scaler_cffi import ffi, lib
 
 auto_convert = True # Global controlling whether automatic channel/type conversions take place
 
-def _scale_4f32(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
+def _scale_4f32(src: np.ndarray, size: tuple, mode: str = 'area', dst: np.ndarray = None) -> np.ndarray:
     assert(len(src.shape) == 3 and src.shape[2] == 4) # Must be 4 channel
 
-    if dst is None:
-        length = size[0] * size[1] * 4
+    if not src.flags['C_CONTIGUOUS']:
+        src = np.ascontiguousarray(src)
 
-        dst = np.empty(length, dtype=np.float32)
+    cdef float[:, :, ::1] src_memview = src
+
+    if dst is None:
+        dst = np.empty((size[1], size[0], 4), dtype=np.float32)
     else:
         if len(dst.shape) != 3 or dst.shape[0] != size[1] or dst.shape[1] != size[0] or dst.shape[2] != 4:
             raise Exception('Incorrect dst size!')
         elif dst.dtype != np.float32:
             raise Exception('Incorrect dst type (must be float32)!')
 
-    src_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(src)))
-    dst_cptr = ffi.cast('f32*', ffi.from_buffer(np.ascontiguousarray(dst)))
+    if not dst.flags['C_CONTIGUOUS']:
+        dst = np.ascontiguousarray(dst)
+
+    cdef float[:, :, ::1] dst_memview = dst
 
     if mode == 'bilinear':
-        lib.scale_bilinear_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
+        scale_bilinear_4f32(&src_memview[0][0][0], &dst_memview[0][0][0], src.shape[1], src.shape[0], size[0], size[1])
     elif mode == 'area':
-        lib.scale_area_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
+        scale_area_4f32(&src_memview[0][0][0], &dst_memview[0][0][0], src.shape[1], src.shape[0], size[0], size[1])
     else:
-        lib.scale_nearest_4f32(src_cptr, dst_cptr, src.shape[1], src.shape[0], size[0], size[1])
+        scale_nearest_4f32(&src_memview[0][0][0], &dst_memview[0][0][0], src.shape[1], src.shape[0], size[0], size[1])
 
     return dst.reshape((size[1], size[0], 4))
 
-def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> np.ndarray:
+@cython.binding(True)
+def scale(src: np.ndarray, size: tuple, mode: str = 'area', dst: np.ndarray = None) -> np.ndarray:
     '''
     scale (resize) a source image to a specified size
 
@@ -57,7 +77,7 @@ def scale(src: np.ndarray, size: tuple, mode='area', dst: np.ndarray = None) -> 
     '''
 
     if not src.data.contiguous:
-        raise Exception('Input image must be contiguous!')
+        raise Exception('Input image must be contiguous! Use np.ascontiguousarray(image) maybe?')
 
     src_dims = len(src.shape)
     src_channels = 4

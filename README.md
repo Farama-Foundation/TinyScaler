@@ -5,7 +5,6 @@ A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon).
 ## Requirements
 
 - Python 3
-- cmake >= 3.1
 
 ## Install from PyPi
 
@@ -28,6 +27,8 @@ print(tinyscaler.scale(img, (32, 32)))
 
 ## Notes
 
+**New since 1.2.0: Simpler Cython build**
+
 **New since 1.1.0: Supports area filtering. It is now the default filtering method as well**
 
 TinyScaler supports mode='area', mode='bilinear', and mode='nearest' filtering. It also allows one to pass a destination buffer in order to avoid duplicate memory allocations.
@@ -40,7 +41,7 @@ TinyScaler is used through a single function. The full signature is:
 scale(src : np.ndarray, size : tuple, mode='area', dst : np.ndarray = None)
 ```
 
-TinyScaler expects a contiguous numpy array. If it is not contiguous, it will throw an error. You can make a non-contiguous numpy array contiguous by calling np.ascontiguousarray.
+TinyScaler expects a contiguous numpy array. If it is not contiguous, it will throw an error. You can make a non-contiguous numpy array contiguous by calling np.ascontiguousarray. Usually a numpy array will already be contiguous.
 
 If the final array dimension is not 4 (RGBA), it will automatically convert to it. Further, if the array is uint8, it will be converted to float32. So the prefered array has a shape (width, height, 4) and dtype=np.float32.
 
@@ -57,11 +58,17 @@ Time elapsed for Pillow: 12.672875003999707
 Time elapsed for skimage: 164.45401711399973
 ```
 
-All methods were forced to use a single thread. OpenCV is slightly faster than TinyScaler, but TinyScaler remains very fast regardless. OpenCV uses an additional hardware acceleration layer (HAL) when OpenCL is disabled, which allows it to still be a bit faster.
+And with area filtering (just TinyScaler and OpenCV):
+
+```
+Time elapsed for tinyscaler: 4.34793155800071
+Time elapsed for OpenCV: 8.118138265999733
+```
+
+All methods were forced to use a single thread. OpenCV is slightly faster than TinyScaler for bilinear filtering, but TinyScaler remains very fast regardless.
+
+Interestingly, for area filtering, TinyScaler is faster (almost 2x).
 
 ## License
 
 MIT License, see [LICENSE.md](./LICENSE.md)
-
-
-
