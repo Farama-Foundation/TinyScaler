@@ -1,3 +1,4 @@
 include README.md LICENSE.md
 include CMakeLists.txt
 include src/tinyscaler.pyx src/scaler.h src/scaler.c
+recursive-exclude examples/
