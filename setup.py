@@ -23,9 +23,13 @@ else: # x86_64
 
 setup(
     name='tinyscaler',
-    version='1.2.0',
+    version='1.2.1',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
+    install_requires=[
+       'numpy',
+       'cython',
+    ],
     license='MIT',
     classifiers=[
         'Environment :: Console',
