@@ -4,26 +4,34 @@ import os
 
 ext_modules = []
 
-if os.uname()[4][:3] == 'arm': # Detect arm platform
-    ext_modules = [
-        Extension(
-            "tinyscaler",
-            ["src/*.pyx"],
-            extra_compile_args=['-mfpu=neon'],
-            extra_link_args=['-mfpu=neon'],
-        )
-    ]
-else: # x86_64
+if os.name == 'nt': # Windows
     ext_modules = [
         Extension(
             "tinyscaler",
             ["src/*.pyx"]
         )
     ]
+else: # Not Windows
+    if os.uname()[4][:3] == 'arm': # Detect arm platform
+        ext_modules = [
+            Extension(
+                "tinyscaler",
+                ["src/*.pyx"],
+                extra_compile_args=['-mfpu=neon'],
+                extra_link_args=['-mfpu=neon'],
+            )
+        ]
+    else: # x86_64
+        ext_modules = [
+            Extension(
+                "tinyscaler",
+                ["src/*.pyx"]
+            )
+        ]
 
 setup(
     name='tinyscaler',
-    version='1.2.3',
+    version='1.2.4',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
     install_requires=[
