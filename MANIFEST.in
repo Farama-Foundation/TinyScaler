@@ -1,2 +1,4 @@
 include README.md LICENSE.md
-global-include CMakeLists.txt *.cmake
+include CMakeLists.txt
+include src/tinyscaler.pyx src/scaler.h src/scaler.c
+recursive-exclude examples/

@@ -1,31 +1,42 @@
 from setuptools import Extension, setup
 from Cython.Build import cythonize
-import os
+import platform
 
 ext_modules = []
 
-if os.uname()[4][:3] == 'arm': # Detect arm platform
-    ext_modules = [
-        Extension(
-            "tinyscaler",
-            ["src/*.pyx"],
-            extra_compile_args=['-mfpu=neon'],
-            extra_link_args=['-mfpu=neon'],
-        )
-    ]
-else: # x86_64
+if platform.system() == 'Windows': # Windows
     ext_modules = [
         Extension(
             "tinyscaler",
             ["src/*.pyx"]
         )
     ]
+else: # Not Windows
+    if platform.machine() == 'x86_64': # Detect x86_64 platform
+        ext_modules = [
+            Extension(
+                "tinyscaler",
+                ["src/*.pyx"]
+            )
+        ]
+    else: # Arm assumed
+        ext_modules = [
+            Extension(
+                "tinyscaler",
+                ["src/*.pyx"],
+                extra_compile_args=['-mfpu=neon'],
+                extra_link_args=['-mfpu=neon'],
+            )
+        ]
 
 setup(
     name='tinyscaler',
-    version='1.2.0',
+    version='1.2.4',
     description='A tiny, simple image scaler',
     long_description='https://github.com/Farama-Foundation/TinyScaler',
+    install_requires=[
+       'numpy',
+    ],
     license='MIT',
     classifiers=[
         'Environment :: Console',
