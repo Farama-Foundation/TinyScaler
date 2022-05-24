@@ -1,10 +1,10 @@
 from setuptools import Extension, setup
 from Cython.Build import cythonize
-import os
+import platform
 
 ext_modules = []
 
-if os.name == 'nt': # Windows
+if platform.system() == 'Windows': # Windows
     ext_modules = [
         Extension(
             "tinyscaler",
@@ -12,20 +12,20 @@ if os.name == 'nt': # Windows
         )
     ]
 else: # Not Windows
-    if os.uname()[4][:3] == 'arm': # Detect arm platform
+    if platform.machine() == 'x86_64': # Detect x86_64 platform
+        ext_modules = [
+            Extension(
+                "tinyscaler",
+                ["src/*.pyx"]
+            )
+        ]
+    else: # Arm assumed
         ext_modules = [
             Extension(
                 "tinyscaler",
                 ["src/*.pyx"],
                 extra_compile_args=['-mfpu=neon'],
                 extra_link_args=['-mfpu=neon'],
-            )
-        ]
-    else: # x86_64
-        ext_modules = [
-            Extension(
-                "tinyscaler",
-                ["src/*.pyx"]
             )
         ]
 
