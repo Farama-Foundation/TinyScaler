@@ -2,6 +2,18 @@ from setuptools import Extension, setup
 from Cython.Build import cythonize
 import platform
 
+with open("README.md") as fh:
+    long_description = ""
+    header_count = 0
+    for line in fh:
+        if line.startswith("##"):
+            header_count += 1
+        if header_count < 2:
+            long_description += line
+        else:
+            break
+
+
 ext_modules = []
 
 if platform.system() == 'Windows': # Windows
@@ -33,7 +45,8 @@ setup(
     name='tinyscaler',
     version='1.2.4',
     description='A tiny, simple image scaler',
-    long_description='https://github.com/Farama-Foundation/TinyScaler',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     install_requires=[
        'numpy',
     ],
