@@ -1,4 +1,6 @@
-# TinyScaler
+<p align="center">
+    <img src="readme.png" width="500px"/>
+</p>
 
 A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon).
 
