@@ -2,7 +2,7 @@
     <img src="readme.png" width="500px"/>
 </p>
 
-A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon).
+A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon). This is planned to be used by Gymnasium and PettingZoo as part of the planned API upgrades to replace OpenCV for image resizing, due to inconveniences and compatibility issues present with OpenCV.
 
 ## Requirements
 
