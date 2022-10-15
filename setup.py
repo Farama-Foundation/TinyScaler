@@ -54,6 +54,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "numpy",
+        "cython",
     ],
     ext_modules=cythonize(
         ext_modules, language_level=3, compiler_directives={"annotation_typing": False}
