@@ -1,5 +1,6 @@
 import cython
 
+
 cdef extern from "scaler.c":
     pass
 

@@ -40,7 +40,7 @@ jobs:
       with:
         python-version: '3.x'
     - name: Install dependencies
-      run: python -m pip install --upgrade setuptools wheel
+      run: python -m pip install --upgrade setuptools wheel cython
     - name: Build wheels
       run: python setup.py sdist bdist_wheel
     - name: Store wheels
