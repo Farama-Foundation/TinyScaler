@@ -40,7 +40,7 @@ header_count, long_description = get_description()
 
 setup(
     name="tinyscaler",
-    version="1.2.4",
+    version="1.2.5",
     author="Farama Foundation",
     author_email="contact@farama.org",
     description="A tiny, simple image scaler",
