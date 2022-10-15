@@ -6,7 +6,7 @@ A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon). Th
 
 ## Requirements
 
-- Python 3
+- Python 3.7+
 
 ## Install from PyPi
 

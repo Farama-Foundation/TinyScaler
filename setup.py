@@ -1,6 +1,8 @@
-from setuptools import Extension, setup
-from Cython.Build import cythonize
 import platform
+
+from Cython.Build import cythonize
+from setuptools import Extension, setup
+
 
 def get_description():
     """Gets the description from the readme."""
@@ -16,41 +18,32 @@ def get_description():
                 break
     return header_count, long_description
 
+
 ext_modules = []
 
-if platform.system() == 'Windows': # Windows
-    ext_modules = [
-        Extension(
-            "tinyscaler",
-            ["src/*.pyx"]
-        )
-    ]
-else: # Not Windows
-    if platform.machine() == 'x86_64': # Detect x86_64 platform
-        ext_modules = [
-            Extension(
-                "tinyscaler",
-                ["src/*.pyx"]
-            )
-        ]
-    else: # Arm assumed
+if platform.system() == "Windows":  # Windows
+    ext_modules = [Extension("tinyscaler", ["src/*.pyx"])]
+else:  # Not Windows
+    if platform.machine() == "x86_64":  # Detect x86_64 platform
+        ext_modules = [Extension("tinyscaler", ["src/*.pyx"])]
+    else:  # Arm assumed
         ext_modules = [
             Extension(
                 "tinyscaler",
                 ["src/*.pyx"],
-                extra_compile_args=['-mfpu=neon'],
-                extra_link_args=['-mfpu=neon'],
+                extra_compile_args=["-mfpu=neon"],
+                extra_link_args=["-mfpu=neon"],
             )
         ]
 
 header_count, long_description = get_description(())
 
 setup(
-    name='tinyscaler',
-    version='1.2.4',
+    name="tinyscaler",
+    version="1.2.4",
     author="Farama Foundation",
     author_email="contact@farama.org",
-    description='A tiny, simple image scaler',
+    description="A tiny, simple image scaler",
     url="https://github.com/Farama-Foundation/TinyScaler",
     license_files=("LICENSE.txt",),
     long_description=long_description,
@@ -59,17 +52,19 @@ setup(
     python_requires=">=3.7, <3.11",
     include_package_data=True,
     install_requires=[
-       'numpy',
+        "numpy",
     ],
-    license='MIT',
+    license="MIT",
     classifiers=[
-        'Environment :: Console',
-        'Programming Language :: Python :: 3',
-        'Intended Audience :: Science/Research',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python',
-        'Topic :: Software Development :: Libraries :: Python Modules'
+        "Environment :: Console",
+        "Programming Language :: Python :: 3",
+        "Intended Audience :: Science/Research",
+        "Operating System :: POSIX :: Linux",
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    ext_modules=cythonize(ext_modules, language_level=3, compiler_directives={'annotation_typing': False}),
+    ext_modules=cythonize(
+        ext_modules, language_level=3, compiler_directives={"annotation_typing": False}
+    ),
     zip_safe=True,
 )
