@@ -36,7 +36,7 @@ else:  # Not Windows
             )
         ]
 
-header_count, long_description = get_description(())
+header_count, long_description = get_description()
 
 setup(
     name="tinyscaler",
@@ -54,15 +54,6 @@ setup(
     include_package_data=True,
     install_requires=[
         "numpy",
-    ],
-    license="MIT",
-    classifiers=[
-        "Environment :: Console",
-        "Programming Language :: Python :: 3",
-        "Intended Audience :: Science/Research",
-        "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     ext_modules=cythonize(
         ext_modules, language_level=3, compiler_directives={"annotation_typing": False}
