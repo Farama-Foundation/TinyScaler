@@ -2,21 +2,10 @@
     <img src="https://raw.githubusercontent.com/Farama-Foundation/TinyScaler/main/tinyscaler-text.png" width="500px"/>
 </p>
 
-A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon). This is planned to be used by Gymnasium and PettingZoo as part of the planned API upgrades to replace OpenCV for image resizing, due to inconveniences and compatibility issues present with OpenCV.
-
-## Requirements
-
-- Python 3.7+
-
-## Install from PyPi
-
-> pip install tinyscaler
-
-## Install from repository
-
-> pip install .
+A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon). This project is aimed to replace OpenCV for image resizing, inconveniences and compatibility issues. 
 
 ## Usage
+Tinyscaler contains a single external function, `scale` that using a numpy array input for the image and the new resized shape, returns the resized image. 
 
 ```python
 import numpy as np
@@ -24,8 +13,24 @@ import tinyscaler
 
 img = np.random.rand(64, 64, 4).astype(np.float32)
 
-print(tinyscaler.scale(img, (32, 32)))
+resize_img = tinyscaler.scale(img, (32, 32))
+print(resize_img.shape, resize_img.dtype)  # (32, 32) np.float32
 ```
+
+## Requirements
+
+- Python 3.7+
+
+## Installation
+You can install from PyPI using
+
+> pip install tinyscaler
+
+Or from the repository, through cloning the project and installing within the repo. 
+
+> git clone https://github.com/Farama-Foundation/TinyScaler.git
+> cd tinyscaler
+> pip install .
 
 ## Notes
 
