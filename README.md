@@ -17,11 +17,28 @@ resize_img = tinyscaler.scale(img, (32, 32))
 print(resize_img.shape, resize_img.dtype)  # (32, 32) np.float32
 ```
 
+TinyScaler supports mode='area', mode='bilinear', and mode='nearest' filtering. It also allows one to pass a destination buffer in order to avoid duplicate memory allocations.
+
+Area filtering is only really useful for downscaling, bilinear will be used even when area filtering is set if upscaling. Area filtering is also likely not worth it when downscaling less than or equal to 2x.
+
+TinyScaler is used through a single function. The full signature is:
+
+```python
+scale(src : np.ndarray, size : tuple, mode='area', dst : np.ndarray = None)
+```
+
+Note that the `size` tuple parameter is (width, height). However, the numpy arrays have dimensions ordered as (height, width, channels). This is similar to OpenCV.
+
+TinyScaler expects a contiguous numpy array. If it is not contiguous, it will throw an error. You can make a non-contiguous numpy array contiguous by calling `np.ascontiguousarray`. Usually a numpy array will already be contiguous.
+
+If the final array dimension is not 4 (RGBA), it will automatically convert to it. Further, if the array is uint8, it will be converted to float32. So the prefered array has a shape `(height, width, 4)` and `dtype=np.float32`.
+
+Finally, downscaling is the focus of TinyScaler. It can also upscale, but it will not be as fast as a more complex separable algorithm in that case.
+
 ## Installation
 You can install from PyPI using `pip install tinyscaler`. Linux and macOS with Python 3.7, 3.8, 3.9 and 3.10 are supported.
 
 ## Performance
-
 In a [simple benchmark](./examples/benchmark.py), we resized the same image (4928x3279) down to (852x567) 100 times using bilinear filtering with several libraries. Here are the times (in seconds) spent (measured with Python's perf_counter) on a AMD 1950x:
 
 ```
