@@ -17,20 +17,8 @@ resize_img = tinyscaler.scale(img, (32, 32))
 print(resize_img.shape, resize_img.dtype)  # (32, 32) np.float32
 ```
 
-## Requirements
-
-- Python 3.7+
-
 ## Installation
-You can install from PyPI using
-
-> pip install tinyscaler
-
-Or from the repository, through cloning the project and installing within the repo. 
-
-> git clone https://github.com/Farama-Foundation/TinyScaler.git
-> cd tinyscaler
-> pip install .
+You can install from PyPI using `pip install tinyscaler`. Linux and macOS with Python 3.7, 3.8, 3.9 and 3.10 are supported.
 
 ## Notes
 
@@ -76,6 +64,3 @@ All methods were forced to use a single thread. OpenCV is slightly faster than T
 
 Interestingly, for area filtering, TinyScaler is faster (almost 2x).
 
-## License
-
-MIT License, see [LICENSE.md](./LICENSE.md)
