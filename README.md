@@ -4,6 +4,9 @@
 
 A small CPU image scaling library with SIMD support on x86_64 and Arm (Neon). This project is aimed to replace OpenCV for image resizing, resolving installation inconveniences and compatibility issues. We developed this for future use in Gymnasium and PettingZoo wrappers.
 
+## Installation
+You can install from PyPI using `pip install tinyscaler`. Linux and macOS with Python 3.7, 3.8, 3.9 and 3.10 are supported.
+
 ## Usage
 Tinyscaler contains a single external function, `scale` that using a numpy array input for the image and the new resized shape, returns the resized image. 
 
@@ -34,9 +37,6 @@ TinyScaler expects a contiguous numpy array. If it is not contiguous, it will th
 If the final array dimension is not 4 (RGBA), it will automatically convert to it. Further, if the array is uint8, it will be converted to float32. So the prefered array has a shape `(height, width, 4)` and `dtype=np.float32`.
 
 Finally, downscaling is the focus of TinyScaler. It can also upscale, but it will not be as fast as a more complex separable algorithm in that case.
-
-## Installation
-You can install from PyPI using `pip install tinyscaler`. Linux and macOS with Python 3.7, 3.8, 3.9 and 3.10 are supported.
 
 ## Performance
 In a [simple benchmark](./examples/benchmark.py), we resized the same image (4928x3279) down to (852x567) 100 times using bilinear filtering with several libraries. Here are the times (in seconds) spent (measured with Python's perf_counter) on a AMD 1950x:
