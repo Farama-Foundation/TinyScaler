@@ -1,2 +1,36 @@
+# Package ######################################################################
+
 [build-system]
 requires = ["setuptools", "wheel", "Cython"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tinyscaler"
+description = "A tiny, simple image scaler."
+readme = "README.md"
+requires-python = ">= 3.7, < 3.11"
+authors = [{ name = "Farama Foundation", email = "contact@farama.org" }]
+license = { text = "MIT License" }
+keywords = ["Reinforcement Learning", "Gymnasium", "PettingZoo"]
+classifiers = [
+    "Development Status :: 4 - Beta",  # change to `5 - Production/Stable` when ready
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Artificial Intelligence',
+]
+version="1.2.5"
+dependencies = [
+    "numpy >=1.21.0",
+]
+dynamic = ["ext_modules"]
+
+[project.urls]
+Homepage = "https://farama.org"
+Repository = "https://github.com/Farama-Foundation/TinyScaler"
+Documentation = "https://gymnasium.farama.org"
+"Bug Report" = "https://github.com/Farama-Foundation/TinyScaler/issues"
