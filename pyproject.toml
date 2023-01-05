@@ -27,7 +27,6 @@ version="1.2.5"
 dependencies = [
     "numpy >=1.21.0",
 ]
-dynamic = ["ext_modules"]
 
 [project.urls]
 Homepage = "https://farama.org"
