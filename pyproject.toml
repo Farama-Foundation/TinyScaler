@@ -31,5 +31,5 @@ dependencies = [
 [project.urls]
 Homepage = "https://farama.org"
 Repository = "https://github.com/Farama-Foundation/TinyScaler"
-Documentation = "https://gymnasium.farama.org"
+Documentation = "https://github.com/Farama-Foundation/TinyScaler"
 "Bug Report" = "https://github.com/Farama-Foundation/TinyScaler/issues"
