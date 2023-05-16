@@ -24,7 +24,7 @@ classifiers = [
     'Intended Audience :: Science/Research',
     'Topic :: Scientific/Engineering :: Artificial Intelligence',
 ]
-version="1.2.5"
+version="1.2.6"
 dependencies = [
     "numpy >=1.21.0",
 ]
