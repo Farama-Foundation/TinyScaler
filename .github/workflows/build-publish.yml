@@ -30,9 +30,11 @@ jobs:
       with:
         python-versions: 'cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311'
         pip-wheel-args: '-w ./dist --no-deps'
-    - name: Source distribution
+    - name: Install build
       shell: bash
       run: python -m pip install build
+    - name: Source distribution
+      shell: bash
       run: python -m build --sdist .
     - name: Store
       uses: actions/upload-artifact@v3
