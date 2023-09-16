@@ -8,7 +8,7 @@ ext_modules = []
 if platform.system() == "Windows":  # Windows
     ext_modules = [Extension("tinyscaler", ["src/*.pyx"])]
 else:  # Not Windows
-    if platform.machine() == "x86_64":  # Detect x86_64 platform
+    if platform.machine() in ["x86_64", "arm64", "aarch64"]:  # Detect 64-bit platforms
         ext_modules = [Extension("tinyscaler", ["src/*.pyx"])]
     else:  # Arm assumed
         ext_modules = [
