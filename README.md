@@ -2,7 +2,7 @@
     <img src="https://raw.githubusercontent.com/Farama-Foundation/TinyScaler/main/tinyscaler-text.png" width="500px"/>
 </p>
 
-This library is depricated/unmaintained.
+**Aug 11, 2025: This project has been deprecated due to a lack of wide spread community use, and is no longer planned to receive any additional updates or support.**
 
 Tinyscaler was small CPU image scaling library with SIMD support on x86_64 and Arm (Neon). This project was aimed to replace OpenCV for image resizing, resolving installation inconveniences and compatibility issues. We developed this for future use in Gymnasium and PettingZoo wrappers.
 
